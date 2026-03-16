@@ -1,4 +1,5 @@
 import { motion, useScroll, useTransform } from "framer-motion";
+import { Link } from "wouter";
 
 interface HeroProps {
   onOpenContact: () => void;
@@ -56,12 +57,12 @@ export function Hero({ onOpenContact }: HeroProps) {
                 <span className="relative z-10">Start Your Journey</span>
                 <div className="absolute inset-0 z-0 bg-gradient-to-r from-primary via-accent to-primary opacity-0 transition-opacity group-hover:opacity-20" />
               </button>
-              <a
-                href="#about"
+              <Link
+                href="/about"
                 className="rounded-full border-2 border-border bg-transparent px-8 py-4 text-sm font-semibold text-foreground transition-all hover:border-accent hover:text-accent"
               >
                 Discover More
-              </a>
+              </Link>
             </div>
           </motion.div>
         </motion.div>

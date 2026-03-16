@@ -1,13 +1,14 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
+import { Link, useLocation } from "wouter";
 
 const navLinks = [
-  { name: "Home", href: "#home" },
-  { name: "About", href: "#about" },
-  { name: "Gurus", href: "#gurus" },
-  { name: "Gallery", href: "#gallery" },
-  { name: "Workshops", href: "#workshops" },
+  { name: "Home", href: "/" },
+  { name: "About", href: "/about" },
+  { name: "Gurus", href: "/gurus" },
+  { name: "Gallery", href: "/gallery" },
+  { name: "Workshops", href: "/workshops" },
 ];
 
 interface NavbarProps {
@@ -17,27 +18,32 @@ interface NavbarProps {
 export function Navbar({ onOpenContact }: NavbarProps) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [location] = useLocation();
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
-    };
+    const handleScroll = () => setIsScrolled(window.scrollY > 20);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  // Close mobile menu on route change
+  useEffect(() => {
+    setIsMobileMenuOpen(false);
+  }, [location]);
 
   return (
     <motion.header
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       transition={{ duration: 0.6, ease: "easeOut" }}
-      className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${isScrolled
+      className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${
+        isScrolled
           ? "bg-background/90 py-3 shadow-md backdrop-blur-md border-b border-border/50"
           : "bg-transparent py-5"
-        }`}
+      }`}
     >
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6">
-        <a href="#home" className="flex items-center gap-2 group">
+        <Link href="/" className="flex items-center gap-2 group">
           <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary text-accent shadow-lg transition-transform group-hover:scale-105">
             <span className="text-2xl italic font-bold">N</span>
           </div>
@@ -49,21 +55,31 @@ export function Navbar({ onOpenContact }: NavbarProps) {
               Music Academy
             </span>
           </div>
-        </a>
+        </Link>
 
         {/* Desktop Nav */}
         <nav className="hidden md:block">
           <ul className="flex items-center gap-8">
-            {navLinks.map((link) => (
-              <li key={link.name}>
-                <a
-                  href={link.href}
-                  className="text-sm font-medium text-foreground/80 hover:text-accent transition-colors relative after:absolute after:-bottom-1 after:left-0 after:h-[2px] after:w-0 after:bg-accent after:transition-all hover:after:w-full"
-                >
-                  {link.name}
-                </a>
-              </li>
-            ))}
+            {navLinks.map((link) => {
+              const isActive =
+                link.href === "/"
+                  ? location === "/"
+                  : location.startsWith(link.href);
+              return (
+                <li key={link.name}>
+                  <Link
+                    href={link.href}
+                    className={`text-sm font-medium transition-colors relative after:absolute after:-bottom-1 after:left-0 after:h-[2px] after:bg-accent after:transition-all ${
+                      isActive
+                        ? "text-accent after:w-full"
+                        : "text-foreground/80 hover:text-accent after:w-0 hover:after:w-full"
+                    }`}
+                  >
+                    {link.name}
+                  </Link>
+                </li>
+              );
+            })}
             <li>
               <button
                 onClick={onOpenContact}
@@ -106,13 +122,12 @@ export function Navbar({ onOpenContact }: NavbarProps) {
             <ul className="flex flex-col px-6 py-4 space-y-4">
               {navLinks.map((link) => (
                 <li key={link.name}>
-                  <a
+                  <Link
                     href={link.href}
-                    onClick={() => setIsMobileMenuOpen(false)}
                     className="block text-lg font-medium text-foreground hover:text-accent"
                   >
                     {link.name}
-                  </a>
+                  </Link>
                 </li>
               ))}
               <li>

@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { FaMapMarkerAlt } from "react-icons/fa";
+import { useContactModal } from "@/hooks/useContactModal";
 
 const events = [
   {
@@ -37,13 +38,15 @@ const events = [
 ];
 
 export function Workshops() {
+  const { openContact } = useContactModal();
+
   return (
     <section id="workshops" className="bg-card py-24 border-t border-border/50">
       <div className="mx-auto max-w-7xl px-6">
 
         <div className="text-center mb-16">
           <h2 className="text-sm font-bold uppercase tracking-widest text-accent mb-3">Calendar</h2>
-          <h3 className="  text-4xl font-bold text-primary md:text-5xl">
+          <h3 className="text-4xl font-bold text-primary md:text-5xl">
             Workshops & Events
           </h3>
         </div>
@@ -68,7 +71,7 @@ export function Workshops() {
 
               {/* Content Block */}
               <div className="p-8 sm:w-3/5 flex flex-col justify-center">
-                <h4 className="  text-2xl font-bold text-foreground mb-2 group-hover:text-accent transition-colors">
+                <h4 className="text-2xl font-bold text-foreground mb-2 group-hover:text-accent transition-colors">
                   {event.title}
                 </h4>
                 <div className="flex items-center gap-2 text-sm text-muted-foreground mb-4">
@@ -78,9 +81,12 @@ export function Workshops() {
                 <p className="text-foreground/80 text-sm mb-6">
                   {event.desc}
                 </p>
-                <a href="#contact" className="text-primary font-semibold text-sm hover:underline">
+                <button
+                  onClick={openContact}
+                  className="text-primary font-semibold text-sm hover:underline text-left"
+                >
                   Register Now →
-                </a>
+                </button>
               </div>
             </motion.div>
           ))}

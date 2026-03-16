@@ -1,3 +1,4 @@
+import { Link } from "wouter";
 import { FaFacebookF, FaInstagram, FaYoutube, FaMapMarkerAlt, FaPhoneAlt, FaEnvelope } from "react-icons/fa";
 
 interface FooterProps {
@@ -45,10 +46,10 @@ export function Footer({ onOpenContact }: FooterProps) {
           <div className="md:col-span-2">
             <h4 className="text-lg font-bold text-white mb-6">Quick Links</h4>
             <ul className="space-y-3 text-sm text-white/70">
-              <li><a href="#about" className="hover:text-accent transition-colors">About Us</a></li>
-              <li><a href="#gurus" className="hover:text-accent transition-colors">Our Gurus</a></li>
-              <li><a href="#gallery" className="hover:text-accent transition-colors">Gallery</a></li>
-              <li><a href="#workshops" className="hover:text-accent transition-colors">Workshops</a></li>
+              <li><Link href="/about" className="hover:text-accent transition-colors">About Us</Link></li>
+              <li><Link href="/gurus" className="hover:text-accent transition-colors">Our Gurus</Link></li>
+              <li><Link href="/gallery" className="hover:text-accent transition-colors">Gallery</Link></li>
+              <li><Link href="/workshops" className="hover:text-accent transition-colors">Workshops</Link></li>
               <li>
                 <button onClick={onOpenContact} className="hover:text-accent transition-colors">
                   Enroll Now
