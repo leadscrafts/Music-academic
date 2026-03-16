@@ -9,13 +9,14 @@ const navLinks = [
   { name: "Gurus", href: "/gurus" },
   { name: "Gallery", href: "/gallery" },
   { name: "Workshops", href: "/workshops" },
+  { name: "Contact", href: "/contact" },
 ];
 
 interface NavbarProps {
-  onOpenContact: () => void;
+  onEnroll: () => void;
 }
 
-export function Navbar({ onOpenContact }: NavbarProps) {
+export function Navbar({ onEnroll }: NavbarProps) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [location] = useLocation();
@@ -26,10 +27,11 @@ export function Navbar({ onOpenContact }: NavbarProps) {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Close mobile menu on route change
   useEffect(() => {
     setIsMobileMenuOpen(false);
   }, [location]);
+
+  const scrolled = isScrolled;
 
   return (
     <motion.header
@@ -37,21 +39,27 @@ export function Navbar({ onOpenContact }: NavbarProps) {
       animate={{ y: 0 }}
       transition={{ duration: 0.6, ease: "easeOut" }}
       className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${
-        isScrolled
-          ? "bg-background/90 py-3 shadow-md backdrop-blur-md border-b border-border/50"
-          : "bg-transparent py-5"
+        scrolled
+          ? "bg-background/95 py-3 shadow-md backdrop-blur-md border-b border-border/60"
+          : "bg-primary/95 py-4 backdrop-blur-sm border-b border-white/10"
       }`}
     >
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6">
-        <Link href="/" className="flex items-center gap-2 group">
-          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary text-accent shadow-lg transition-transform group-hover:scale-105">
-            <span className="text-2xl italic font-bold">N</span>
+
+        {/* Logo */}
+        <Link href="/" className="flex items-center gap-3 group">
+          <div className={`flex h-10 w-10 items-center justify-center rounded-full shadow-lg transition-all group-hover:scale-105 ${
+            scrolled ? "bg-primary text-accent" : "bg-accent text-primary"
+          }`}>
+            <span className="text-xl italic font-bold">N</span>
           </div>
           <div className="flex flex-col">
-            <span className="text-xl font-bold leading-none tracking-tight text-primary">
+            <span className={`text-base font-bold leading-none tracking-tight transition-colors ${
+              scrolled ? "text-foreground" : "text-primary-foreground"
+            }`}>
               Nada Brahma
             </span>
-            <span className="text-[0.65rem] font-medium uppercase tracking-widest text-accent">
+            <span className="text-[0.6rem] font-semibold uppercase tracking-widest text-accent">
               Music Academy
             </span>
           </div>
@@ -59,43 +67,40 @@ export function Navbar({ onOpenContact }: NavbarProps) {
 
         {/* Desktop Nav */}
         <nav className="hidden md:block">
-          <ul className="flex items-center gap-8">
+          <ul className="flex items-center gap-7">
             {navLinks.map((link) => {
               const isActive =
-                link.href === "/"
-                  ? location === "/"
-                  : location.startsWith(link.href);
+                link.href === "/" ? location === "/" : location.startsWith(link.href);
               return (
                 <li key={link.name}>
                   <Link
                     href={link.href}
-                    className={`text-sm font-medium transition-colors relative after:absolute after:-bottom-1 after:left-0 after:h-[2px] after:bg-accent after:transition-all ${
-                      isActive
+                    className={`text-sm font-medium transition-colors relative
+                      after:absolute after:-bottom-1 after:left-0 after:h-[2px] after:bg-accent after:transition-all
+                      ${isActive
                         ? "text-accent after:w-full"
-                        : "text-foreground/80 hover:text-accent after:w-0 hover:after:w-full"
-                    }`}
+                        : scrolled
+                          ? "text-foreground/75 hover:text-accent after:w-0 hover:after:w-full"
+                          : "text-primary-foreground/80 hover:text-accent after:w-0 hover:after:w-full"
+                      }`}
                   >
                     {link.name}
                   </Link>
                 </li>
               );
             })}
-            <li>
-              <button
-                onClick={onOpenContact}
-                className="text-sm font-medium text-foreground/80 hover:text-accent transition-colors relative after:absolute after:-bottom-1 after:left-0 after:h-[2px] after:w-0 after:bg-accent after:transition-all hover:after:w-full"
-              >
-                Contact
-              </button>
-            </li>
           </ul>
         </nav>
 
         {/* Enroll Button Desktop */}
         <div className="hidden md:block">
           <button
-            onClick={onOpenContact}
-            className="rounded-full bg-primary px-6 py-2.5 text-sm font-semibold text-primary-foreground shadow-lg shadow-primary/20 transition-all hover:-translate-y-0.5 hover:shadow-xl hover:bg-primary/90"
+            onClick={onEnroll}
+            className={`rounded-full px-6 py-2.5 text-sm font-semibold shadow-lg transition-all hover:-translate-y-0.5 hover:shadow-xl ${
+              scrolled
+                ? "bg-primary text-primary-foreground hover:bg-primary/90"
+                : "bg-accent text-primary hover:bg-accent/90"
+            }`}
           >
             Enroll Now
           </button>
@@ -103,8 +108,9 @@ export function Navbar({ onOpenContact }: NavbarProps) {
 
         {/* Mobile Menu Toggle */}
         <button
-          className="p-2 text-primary md:hidden"
+          className={`p-2 md:hidden transition-colors ${scrolled ? "text-foreground" : "text-primary-foreground"}`}
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          aria-label="Toggle menu"
         >
           {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
         </button>
@@ -117,31 +123,29 @@ export function Navbar({ onOpenContact }: NavbarProps) {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            className="border-t border-border/50 bg-background/95 backdrop-blur-md md:hidden"
+            className="border-t border-white/10 bg-primary/98 backdrop-blur-md md:hidden"
           >
-            <ul className="flex flex-col px-6 py-4 space-y-4">
-              {navLinks.map((link) => (
-                <li key={link.name}>
-                  <Link
-                    href={link.href}
-                    className="block text-lg font-medium text-foreground hover:text-accent"
-                  >
-                    {link.name}
-                  </Link>
-                </li>
-              ))}
-              <li>
+            <ul className="flex flex-col px-6 py-5 space-y-4">
+              {navLinks.map((link) => {
+                const isActive =
+                  link.href === "/" ? location === "/" : location.startsWith(link.href);
+                return (
+                  <li key={link.name}>
+                    <Link
+                      href={link.href}
+                      className={`block text-base font-medium transition-colors ${
+                        isActive ? "text-accent" : "text-primary-foreground/80 hover:text-accent"
+                      }`}
+                    >
+                      {link.name}
+                    </Link>
+                  </li>
+                );
+              })}
+              <li className="pt-2 border-t border-white/10">
                 <button
-                  onClick={() => { setIsMobileMenuOpen(false); onOpenContact(); }}
-                  className="block w-full text-left text-lg font-medium text-foreground hover:text-accent"
-                >
-                  Contact
-                </button>
-              </li>
-              <li className="pt-2">
-                <button
-                  onClick={() => { setIsMobileMenuOpen(false); onOpenContact(); }}
-                  className="block w-full rounded-full bg-primary px-4 py-3 text-center text-sm font-semibold text-primary-foreground shadow-md"
+                  onClick={() => { setIsMobileMenuOpen(false); onEnroll(); }}
+                  className="block w-full rounded-full bg-accent px-4 py-3 text-center text-sm font-semibold text-primary shadow-md hover:bg-accent/90 transition-colors"
                 >
                   Enroll Now
                 </button>

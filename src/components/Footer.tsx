@@ -50,6 +50,7 @@ export function Footer({ onOpenContact }: FooterProps) {
               <li><Link href="/gurus" className="hover:text-accent transition-colors">Our Gurus</Link></li>
               <li><Link href="/gallery" className="hover:text-accent transition-colors">Gallery</Link></li>
               <li><Link href="/workshops" className="hover:text-accent transition-colors">Workshops</Link></li>
+              <li><Link href="/contact" className="hover:text-accent transition-colors">Contact</Link></li>
               <li>
                 <button onClick={onOpenContact} className="hover:text-accent transition-colors">
                   Enroll Now

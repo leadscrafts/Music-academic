@@ -9,6 +9,7 @@ import AboutPage from "@/pages/AboutPage";
 import GurusPage from "@/pages/GurusPage";
 import GalleryPage from "@/pages/GalleryPage";
 import WorkshopsPage from "@/pages/WorkshopsPage";
+import ContactPage from "@/pages/ContactPage";
 
 const queryClient = new QueryClient();
 
@@ -20,6 +21,7 @@ function Router() {
       <Route path="/gurus" component={GurusPage} />
       <Route path="/gallery" component={GalleryPage} />
       <Route path="/workshops" component={WorkshopsPage} />
+      <Route path="/contact" component={ContactPage} />
       <Route component={NotFound} />
     </Switch>
   );
